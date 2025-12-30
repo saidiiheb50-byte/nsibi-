@@ -60,9 +60,9 @@ exports/
 *.shp
 *.tif
 *.npy
-*.json
-!package.json
-!tsconfig.json
+
+# Vercel
+.vercel
 
 
 

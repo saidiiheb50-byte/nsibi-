@@ -1,0 +1,15 @@
+backend/
+venv/
+*.py
+requirements.txt
+__pycache__/
+uploads/
+processed/
+exports/
+*.las
+*.laz
+*.csv
+*.dwg
+*.dxf
+*.shp
+
