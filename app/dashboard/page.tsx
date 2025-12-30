@@ -36,10 +36,11 @@ export default function Dashboard() {
   const [results, setResults] = useState<any>(null)
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
+    console.log('Files dropped:', acceptedFiles.length)
     acceptedFiles.forEach((file) => {
       const fileType = file.name.split('.').pop()?.toLowerCase() || ''
       const newFile: FileType = {
-        id: Date.now().toString(),
+        id: Date.now().toString() + Math.random(),
         name: file.name,
         type: fileType,
         size: file.size,
@@ -47,6 +48,7 @@ export default function Dashboard() {
         progress: 0,
       }
       
+      console.log('Adding file:', newFile.name)
       setFiles((prev) => [...prev, newFile])
       
       // Simulate upload
@@ -67,6 +69,7 @@ export default function Dashboard() {
             f.id === newFile.id ? { ...f, status: 'completed', progress: 100 } : f
           )
         )
+        console.log('File upload completed:', newFile.name)
       }, 2000)
     })
   }, [])
@@ -82,36 +85,47 @@ export default function Dashboard() {
   })
 
   const handleProcess = async () => {
-    if (files.length === 0) return
-    
-    setIsProcessing(true)
-    setProcessingStep('Initialisation des modèles IA...')
-    
-    // Simulate processing steps
-    const steps = [
-      'Pré-traitement des données...',
-      'Exécution de la détection de terrain par IA...',
-      'Nettoyage du bruit et des valeurs aberrantes...',
-      'Génération du DEM/DTM...',
-      'Extraction des lignes de contour...',
-      'Calcul de la pente et de l\'orientation...',
-      'Finalisation des résultats...',
-    ]
-
-    for (let i = 0; i < steps.length; i++) {
-      setProcessingStep(steps[i])
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+    console.log('handleProcess called', { filesCount: files.length })
+    if (files.length === 0) {
+      console.log('No files to process')
+      return
     }
-
-    setResults({
-      dem: { status: 'ready', resolution: '10cm' },
-      contours: { status: 'ready', count: 1247, interval: '1m' },
-      slope: { status: 'ready' },
-      aspect: { status: 'ready' },
-    })
     
-    setIsProcessing(false)
-    setProcessingStep('')
+    try {
+      setIsProcessing(true)
+      setProcessingStep('Initialisation des modèles IA...')
+      
+      // Simulate processing steps
+      const steps = [
+        'Pré-traitement des données...',
+        'Exécution de la détection de terrain par IA...',
+        'Nettoyage du bruit et des valeurs aberrantes...',
+        'Génération du DEM/DTM...',
+        'Extraction des lignes de contour...',
+        'Calcul de la pente et de l\'orientation...',
+        'Finalisation des résultats...',
+      ]
+
+      for (let i = 0; i < steps.length; i++) {
+        setProcessingStep(steps[i])
+        await new Promise((resolve) => setTimeout(resolve, 1500))
+      }
+
+      setResults({
+        dem: { status: 'ready', resolution: '10cm' },
+        contours: { status: 'ready', count: 1247, interval: '1m' },
+        slope: { status: 'ready' },
+        aspect: { status: 'ready' },
+      })
+      
+      setIsProcessing(false)
+      setProcessingStep('')
+      console.log('Processing completed')
+    } catch (error) {
+      console.error('Processing error:', error)
+      setIsProcessing(false)
+      setProcessingStep('')
+    }
   }
 
   return (
