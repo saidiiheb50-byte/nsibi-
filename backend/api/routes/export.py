@@ -86,5 +86,31 @@ async def export_landxml(file_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.get("/pdf/{file_id}")
+async def export_pdf(file_id: str):
+    """Export point cloud data to PDF plan"""
+    export_service = ExportService()
+    
+    try:
+        # Try to load point cloud metadata
+        point_cloud_data = None
+        try:
+            import json
+            metadata_path = Path("processed") / f"metadata_{file_id}.json"
+            if metadata_path.exists():
+                with open(metadata_path) as f:
+                    point_cloud_data = json.load(f)
+        except:
+            pass
+        
+        output_path = await export_service.export_to_pdf(file_id, point_cloud_data)
+        return FileResponse(
+            output_path,
+            media_type="application/pdf",
+            filename=f"{file_id}_plan.pdf"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 
