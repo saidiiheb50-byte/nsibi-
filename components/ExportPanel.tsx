@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Download, File, CheckCircle2 } from 'lucide-react'
+import { Download, File, CheckCircle2, FileText } from 'lucide-react'
 
 interface ExportPanelProps {
   results: any
@@ -12,7 +12,7 @@ export default function ExportPanel({ results }: ExportPanelProps) {
 
   const exportFormats = [
     { name: 'Plan PDF', format: 'pdf', icon: FileText, color: 'from-red-500 to-pink-500', priority: true, description: 'Plan détaillé avec statistiques' },
-    { name: 'AutoCAD DWG', format: 'dwg', icon: MapPin, color: 'from-blue-500 to-cyan-500', priority: true, description: 'Fichier AutoCAD' },
+    { name: 'AutoCAD DWG', format: 'dwg', icon: File, color: 'from-blue-500 to-cyan-500', priority: true, description: 'Fichier AutoCAD' },
     { name: 'AutoCAD DXF', format: 'dxf', icon: File, color: 'from-blue-400 to-blue-600', description: 'Format DXF' },
     { name: 'Shapefile', format: 'shp', icon: File, color: 'from-green-500 to-emerald-500', description: 'Format GIS' },
     { name: 'CSV Points', format: 'csv', icon: File, color: 'from-slate-500 to-slate-700', description: 'Données brutes' },
